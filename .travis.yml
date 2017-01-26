@@ -1,15 +1,5 @@
 language: php
 
-sudo: false
-
-addons:
-  apt:
-    packages:
-      - tidy
-
-before_install:
-  - pip install --user codecov
-
 env:
   global:
     # Turn coverage off by default, as it's expensive time wise
@@ -43,6 +33,7 @@ before_script:
   - git clone git://github.com/silverstripe/silverstripe-travis-support.git ~/travis-support
   - php ~/travis-support/travis_setup.php --source `pwd` --target ~/builds/ss --require "silverstripe/comments" --require "silverstripe/widgets"
   - cd ~/builds/ss
+  - cp "$MODULE_PATH/phpunit.xml.dist" .
 
 #Execute tests with or without coverage
 script:
@@ -50,11 +41,11 @@ script:
   - "if [ \"$COVERAGE\" = \"0\" ]; then vendor/bin/phpunit $MODULE_PATH/tests/; fi"
 
   # Execute tests with coverage.  Do this for a small
-  - "if [ \"$COVERAGE\" = \"1\" ]; then vendor/bin/phpunit --coverage-clover=coverage.clover $MODULE_PATH/tests/; fi"
+  - "if [ \"$COVERAGE\" = \"1\" ]; then vendor/bin/phpunit --coverage-clover=coverage.xml $MODULE_PATH/tests/; fi"
 
 #Upload coverage even if there is a failure
 after_script:
-  - "if [ \"$COVERAGE\" = \"1\" ]; then mv coverage.clover ~/build/$TRAVIS_REPO_SLUG/; fi"
+  - "if [ \"$COVERAGE\" = \"1\" ]; then mv coverage.xml ~/build/$TRAVIS_REPO_SLUG/; fi"
   - cd ~/build/$TRAVIS_REPO_SLUG
   - wget https://scrutinizer-ci.com/ocular.phar
-  - "if [ \"$COVERAGE\" = \"1\" ]; then travis_retry codecov && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi"
+  - "if [ \"$COVERAGE\" = \"1\" ]; then travis_retry codecov && travis_retry php ocular.phar code-coverage:upload --format=php-clover coverage.xml; fi"
