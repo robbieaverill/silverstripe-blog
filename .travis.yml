@@ -24,7 +24,7 @@ matrix:
       env: DB=MYSQL CORE_RELEASE=4
 
     - php: 5.6
-      env: DB=MYSQL CORE_RELEASE=4 COVERAGE=1
+      env: DB=MYSQL CORE_RELEASE=4
     - php: 5.6
       env: DB=PGSQL CORE_RELEASE=4
     - php: 5.6
@@ -34,11 +34,7 @@ matrix:
       env: DB=MYSQL CORE_RELEASE=4
 
     - php: 7.1
-      env: DB=MYSQL CORE_RELEASE=4
-    - php: 7.1
-      env: DB=PGSQL CORE_RELEASE=4
-    - php: 7.1
-      env: DB=SQLITE CORE_RELEASE=4
+      env: DB=MYSQL CORE_RELEASE=4 COVERAGE=1
 
 
 before_script:
